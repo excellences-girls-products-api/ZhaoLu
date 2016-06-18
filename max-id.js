@@ -5,7 +5,7 @@ fs.stat(maxIdFile, function (err, stat) {
     if (stat && stat.isFile()) {
         return;
     }
-    
+
     initMaxIdFile();
 });
 

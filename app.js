@@ -12,6 +12,11 @@ app.use('/products', require('./router/insert-product.js'));
 app.use('/products', require('./router/delete-product.js'));
 app.use('/products', require('./router/update-product.js'));
 
+app.use(function (err, res) {
+    console.error(err.stack);
+    res.sendStatus(500);
+});
+
 app.listen(3000, function () {
     console.log('server start...');
 });

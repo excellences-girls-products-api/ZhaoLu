@@ -3,13 +3,9 @@ var router = express.Router();
 var fs = require('fs');
 var productsFile = './products.json';
 
-router.put('/:id', function (req, res) {
+router.put('/:id', function (req, res, next) {
     fs.readFile(productsFile, 'utf-8', function (err, products) {
-        if (err) {
-            console.error(err.stack);
-            res.status(500);
-            return;
-        }
+        if (err) return next(err);
 
         products = JSON.parse(products);
         var product = req.body;
@@ -31,7 +27,7 @@ function updateProduct(products, product, req, res) {
             products[i].unit = product.unit;
             products[i].price = product.price;
 
-            writeProductsFile(products, res);
+            fs.writeFile(productsFile, JSON.stringify(products));
             res.status(200).json(products[i]);
             return;
         }
@@ -49,17 +45,6 @@ function isExistProperties(product) {
 function isCorrectType(product) {
     return typeof(product.barcode) === 'string' && typeof(product.name) === "string" &&
         typeof(product.unit) === "string" && typeof(product.price) === "number";
-}
-
-function writeProductsFile(products, res) {
-    fs.writeFile(productsFile, JSON.stringify(products), function (err) {
-        if (err) {
-            res.sendStatus(404);
-            return;
-        }
-
-        return;
-    });
 }
 
 module.exports = router;

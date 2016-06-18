@@ -5,7 +5,7 @@ fs.stat(productsFile, function (err, stat) {
     if (stat && stat.isFile()) {
         return;
     }
-    
+
     initProductsFile();
 });
 
